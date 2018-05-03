@@ -12,3 +12,9 @@ h1, h2 {
     color: red;
     font-weight: bold;
 }
+
+footer {
+text-align: center;
+font-size: 80%;
+margin-top: 100px;
+}

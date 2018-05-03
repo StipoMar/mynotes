@@ -38,11 +38,17 @@ function addNote(e){
 
     addNoteLocalStorage(note);
 
+    alert('New Note Added');
+
 }
 function removeNote(e) {
     if(e.target.classList.contains('remove-note')){
         e.target.parentElement.remove();
     }
+
+    removeNoteFromLocalStorage(e.target.parentElement.textContent);
+
+    alert('Note removed!');
 }
 function addNoteLocalStorage(note) {
     let notes = getNoteFromStorage();
@@ -84,3 +90,17 @@ function localStorageOnLoad() {
         noteList.appendChild(li);
    });
 }
+
+function removeNoteFromLocalStorage(note){
+    let notes = getNoteFromStorage();
+
+    const noteDelete = note.substring(0, note.length -1);
+    notes.forEach(function(noteLS, index){
+        if(noteDelete === noteLS){
+            notes.splice(index, 1)
+        }
+
+    }); 
+
+    localStorage.setItem('notes', JSON.stringify(notes));
+    }
