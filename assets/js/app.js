@@ -9,9 +9,15 @@ const noteList = document.getElementById('note-list');
 eventListeners ();
 
 function eventListeners() {
-
+// Listening submit event
 document.querySelector('#form').addEventListener('submit', addNote); 
+
+// Listen for click on "X" to remove note
 noteList.addEventListener('click', removeNote);
+
+// Document
+
+document.addEventListener('DOMContentLoaded', localStorageOnLoad);
 }
 
 function addNote(e){
@@ -19,20 +25,62 @@ function addNote(e){
     const note = document.getElementById('note').value;
     
     
-    let removeBtn = document.createElement('a');
+    const removeBtn = document.createElement("a");
         removeBtn.classList = 'remove-note';
         removeBtn.textContent = 'X';
 
-    let li = document.createElement('li');
+    const li = document.createElement("li");
         li.textContent = note;
 
     li.appendChild(removeBtn);
 
     noteList.appendChild(li);
 
+    addNoteLocalStorage(note);
+
 }
 function removeNote(e) {
     if(e.target.classList.contains('remove-note')){
         e.target.parentElement.remove();
     }
+}
+function addNoteLocalStorage(note) {
+    let notes = getNoteFromStorage();
+
+    notes.push(note);
+
+    localStorage.setItem('notes', JSON.stringify( notes )  );
+}
+
+function getNoteFromStorage() {
+    let notes;
+    const notesLS = localStorage.getItem('notes');
+
+    if(notesLS === null) {
+        notes = [];
+    }else {
+        notes = JSON.parse( notesLS );
+    }
+
+    return notes;
+}
+function localStorageOnLoad() {
+    let notes = getNoteFromStorage(); 
+
+    notes.forEach(function(tweet) {
+        // Create the remove button
+        const removeBtn = document.createElement('a');
+        removeBtn.classList = 'remove-note';
+        removeBtn.textContent = 'X';
+
+        // Create an <li> element
+        const li = document.createElement('li');
+        li.textContent = tweet; 
+        
+        // Add the remove button to each tweet
+        li.appendChild(removeBtn);
+
+        // Add to the list
+        noteList.appendChild(li);
+   });
 }
